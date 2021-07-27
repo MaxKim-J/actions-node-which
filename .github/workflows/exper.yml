@@ -3,4 +3,17 @@ name: 'review-release'
 on:
   push:
     branches:
-      - main
+      - master
+
+jobs:
+  test:
+    runs-on: macos-latest
+
+    steps:
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: which node
+        run: which node
