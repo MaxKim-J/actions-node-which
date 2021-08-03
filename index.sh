@@ -1,9 +1,17 @@
 #!/bin/bash
 
-DIFF=($(git diff --name-only f4f0d3b dbc20ad))
+DIFF=$(git diff --name-only HEAD master)
+
+is_review_relase=true
 
 for x in $DIFF
 do
   echo $x
-  echo '으앙..'
+  if [[ $x == *.android* ]] || [[ $x == *.ios* ]]
+  then
+    is_review_relase=false
+    break
+  fi
 done
+
+echo $is_review_relase
