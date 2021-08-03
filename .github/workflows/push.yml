@@ -23,10 +23,21 @@ jobs:
           ref: 현재 PR 브랜치 이름
 
       - name: Check Diff
+        shell: bash
         run: |
-          DIFF=($(git diff --name-only 현재브랜치PR의헤드 master브랜치PR의헤드))
+          DIFF=$(git diff --name-only HEAD master)
+
+          IS_REVIEW_RELEASE=true
+
           for x in $DIFF
           do
             echo $x
-            echo '으앙..'
+            if [[ $x == *.ios* ]]
+            then
+              is_review_relase=false
+              break
+            fi
           done
+
+          echo $is_review_relase
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
