@@ -1,17 +1,20 @@
 #!/bin/bash
 
-DIFF=$(git diff --name-only HEAD master)
+ABX=v$(grep "versionName \"[1-9].[0-9].[0-9]\"" android/app/build.gradle | tr -d ' ' | cut -c 13-17 )
 
-is_review_relase=true
+echo $ABX
 
-for x in $DIFF
-do
-  echo $x
-  if [[ $x == *.android* ]] || [[ $x == *.ios* ]]
-  then
-    is_review_relase=false
-    break
-  fi
-done
+VERSION=v1.2.3a
 
-echo $is_review_relase
+cut -c 7 $VERSION
+echo $VERSION
+
+#VERSION_LAST_FIGURE=$VERSION |
+#
+#echo $VERSION_LAST_FIGURE
+
+if [ $VERSION_LAST_FIGURE = ' ' ]; then
+  echo '으앙'
+else
+  echo '으억'
+fi
