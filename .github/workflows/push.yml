@@ -42,7 +42,7 @@ jobs:
       - name: Get Latest Release tag name
         shell: bash
         run: |
-          LATEST_RELEASE=$(curl --silent -i -u username:${{ secrets.ACCESS_TOKEN }} "https://api.github.com/repos/MaxKim-J/actions-node-which/releases/latest" | grep '"tag_name":' | sed -E 's/"tag_name": "(.+)"\,/\1/')
+          LATEST_RELEASE=$(curl --silent -i -u username:${{ secrets.ACCESS_TOKEN }} "https://api.github.com/repos/MaxKim-J/actions-node-which/releases/latest" | grep '"tag_name":' | sed -E 's/"tag_name": "(.+)"\,/\1/' | tr -d ' ')
           echo $LATEST_RELEASE
 
           echo "ENV_LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
