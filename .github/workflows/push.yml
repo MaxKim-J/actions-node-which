@@ -24,14 +24,14 @@ jobs:
           git fetch origin master
           DIFF=$(git diff --name-only HEAD origin/master)
 
-          IS_REVIEW_RELEASE=true
+          IS_REVIEW_RELEASE=false
 
           for diff in $DIFF
           do
             echo $diff
             if [[ $diff == *android* ]] || [[ $diff == *ios* ]]
             then
-              IS_REVIEW_RELEASE=false
+              IS_REVIEW_RELEASE=true
               break
             fi
           done
