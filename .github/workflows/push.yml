@@ -20,6 +20,8 @@ jobs:
       - name: Check Diff and Verifying release
         shell: bash
         run: |
+          git branch
+
           DIFF=$(git diff --name-only HEAD master)
 
           IS_REVIEW_RELEASE=true
@@ -36,7 +38,6 @@ jobs:
 
           echo $IS_REVIEW_RELEASE
           echo "ENV_IS_REVIEW_RELEASE=$IS_REVIEW_RELEASE" >> $GITHUB_ENV
-          git branch
 
       - name: Get Latest Release tag name
         shell: bash
