@@ -15,7 +15,7 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.ACCESS_TOKEN }}
-          ref: ${ BASE_BRANCH }
+          ref: ${{ github.base_ref }}
 
       - name: Check Diff and Verifying release
         shell: bash
