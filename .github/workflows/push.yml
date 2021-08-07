@@ -21,7 +21,7 @@ jobs:
       - name: Check Diff and Verifying release
         shell: bash
         run: |
-          DIFF=$(git diff --name-only HEAD origin/master)
+          DIFF=$(git diff --name-only origin/master)
 
           IS_REVIEW_RELEASE=true
 
