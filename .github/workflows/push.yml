@@ -66,4 +66,5 @@ jobs:
 
       - name: Make Draft release
         run: |
+          echo ${ENV_NEW_RELEASE_VERSION}
           curl -X POST --silent -i -u username:${{ secrets.ACCESS_TOKEN }} "https://api.github.com/repos/MaxKim-J/actions-node-which/releases/latest" -d '{"tag_name":${ENV_NEW_RELEASE_VERSION}, "name":${ENV_NEW_RELEASE_VERSION}}'
