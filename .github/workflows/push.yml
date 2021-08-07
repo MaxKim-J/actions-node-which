@@ -36,6 +36,7 @@ jobs:
 
           echo $IS_REVIEW_RELEASE
           echo "ENV_IS_REVIEW_RELEASE=$IS_REVIEW_RELEASE" >> $GITHUB_ENV
+          git branch
 
       - name: Get Latest Release tag name
         shell: bash
