@@ -54,10 +54,10 @@ jobs:
             NEW_RELEASE_VERSION=v$(grep "versionName \"[1-9].[0-9].[0-9]\"" android/app/build.gradle | tr -d ' ' | cut -c 13-17 )
           else
             if [ ${ENV_LATEST_RELEASE:6} != '' ]; then
-              NEW_MINOR_FIGURE=$(echo "${LATEST_VERSION:6}" | tr "0-9a-z" "1-9a-z_")
-              NEW_RELEASE_VERSION=${LATEST_VERSION:1:5}${NEW_MINOR_FIGURE}
+              NEW_MINOR_FIGURE=$(echo "${ENV_LATEST_RELEASE:6}" | tr "0-9a-z" "1-9a-z_")
+              NEW_RELEASE_VERSION=${ENV_LATEST_RELEASE:1:5}${NEW_MINOR_FIGURE}
             else
-              NEW_RELEASE_VERSION=${LATEST_VERSION}a
+              NEW_RELEASE_VERSION=${ENV_LATEST_RELEASE}a
             fi
           fi
 
@@ -67,4 +67,4 @@ jobs:
       - name: Make Draft release
         run: |
           echo ${ENV_NEW_RELEASE_VERSION}
-          curl -X POST --silent -i -u username:${{ secrets.ACCESS_TOKEN }} "https://api.github.com/repos/MaxKim-J/actions-node-which/releases/latest" -d '{"tag_name":${ENV_NEW_RELEASE_VERSION}, "name":${ENV_NEW_RELEASE_VERSION}}'
+          curl -X POST --silent -i -u username:${{ secrets.ACCESS_TOKEN }} "https://api.github.com/repos/MaxKim-J/actions-node-which/releases" -d '{"tag_name":${ENV_NEW_RELEASE_VERSION}, "name":${ENV_NEW_RELEASE_VERSION}}'
