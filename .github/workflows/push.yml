@@ -21,7 +21,8 @@ jobs:
       - name: Check Diff and Verifying release
         shell: bash
         run: |
-          DIFF=$(git diff --name-only origin/master)
+          git fetch origin master
+          DIFF=$(git diff --name-only HEAD origin/master)
 
           IS_REVIEW_RELEASE=true
 
