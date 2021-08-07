@@ -16,6 +16,7 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.ACCESS_TOKEN }}
+          ref: develop
 
       - name: Check Diff and Verifying release
         shell: bash
