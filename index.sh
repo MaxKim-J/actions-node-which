@@ -4,17 +4,15 @@ ABX=v$(grep "versionName \"[1-9].[0-9].[0-9]\"" android/app/build.gradle | tr -d
 
 echo $ABX
 
-VERSION=v1.2.3a
+LATEST_VERSION=v1.2.3
 
-cut -c 7 $VERSION
-echo $VERSION
+echo ${LATEST_VERSION:6}
 
-#VERSION_LAST_FIGURE=$VERSION |
-#
-#echo $VERSION_LAST_FIGURE
-
-if [ $VERSION_LAST_FIGURE = ' ' ]; then
-  echo '으앙'
+if [[ ${LATEST_VERSION:6} != '' ]]; then
+  NEW_MINOR_FIGURE=$(echo "${LATEST_VERSION:6}" | tr "0-9a-z" "1-9a-z_")
+  NEW_VERSION=${LATEST_VERSION:1:5}${NEW_MINOR_FIGURE}
 else
-  echo '으억'
+  NEW_VERSION=${LATEST_VERSION}a
 fi
+
+echo $NEW_VERSION
