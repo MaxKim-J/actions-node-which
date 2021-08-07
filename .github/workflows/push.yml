@@ -21,10 +21,7 @@ jobs:
       - name: Check Diff and Verifying release
         shell: bash
         run: |
-          git remote update
-          git branch
-
-          DIFF=$(git diff --name-only HEAD master)
+          DIFF=$(git diff --name-only HEAD origin/master)
 
           IS_REVIEW_RELEASE=true
 
