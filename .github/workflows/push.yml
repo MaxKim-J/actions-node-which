@@ -1,4 +1,4 @@
-name: 'PR'
+name: "PR"
 
 on:
   pull_request:
@@ -17,52 +17,53 @@ jobs:
           token: ${{ secrets.ACCESS_TOKEN }}
           ref: ${ BASE_BRANCH }
 
-      - name: Check Diff
+      - name: Check Diff and Verifying release
         shell: bash
         run: |
           DIFF=$(git diff --name-only HEAD master)
 
           IS_REVIEW_RELEASE=true
 
-          for x in $DIFF
+          for diff in $DIFF
           do
-            echo $x
-            if [[ $x == *android* ]] || [[ $x == *ios* ]]
+            echo $diff
+            if [[ $diff == *android* ]] || [[ $diff == *ios* ]]
             then
               IS_REVIEW_RELEASE=false
               break
             fi
           done
 
-          echo "IS_REVIEW_RELEASE=$IS_REVIEW_RELEASE" >> $GITHUB_ENV
+          echo $IS_REVIEW_RELEASE
+          echo "ENV_IS_REVIEW_RELEASE=$IS_REVIEW_RELEASE" >> $GITHUB_ENV
 
-      - name: Get Latest Release
+      - name: Get Latest Release tag name
         shell: bash
         run: |
           LATEST_RELEASE=curl --silent "https://api.github.com/repos/$1/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
-          echo LATEST_RELEASE
-          echo "LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
+          echo $LATEST_RELEASE
+
+          echo "ENV_LATEST_RELEASE=$LATEST_RELEASE" >> $GITHUB_ENV
 
       - name: Get current release version
         shell: bash
         run: |
-          if [${IS_REVIEW_RELEASE} = true ]; then
+          if [${ENV_IS_REVIEW_RELEASE} = true ]; then
             NEW_RELEASE_VERSION=v$(grep "versionName \"[1-9].[0-9].[0-9]\"" android/app/build.gradle | tr -d ' ' | cut -c 13-17 )
           else
-            if [${LATEST_RELEASE}| cut -c 7 = '']; then
-              # 기존 릴리즈 뒤에 아무것도 없으면 a를 붙이고
-
+            if [ ${ENV_LATEST_RELEASE:6}!= '' ]; then
+              NEW_MINOR_FIGURE=$(echo "${LATEST_VERSION:6}" | tr "0-9a-z" "1-9a-z_")
+              NEW_RELEASE_VERSION=${LATEST_VERSION:1:5}${NEW_MINOR_FIGURE}
             else
-              # 기존 릴리즈 뒤에 이미 알파벳이 있으면 알파벳을 하나 올려서 붙임
-
+              NEW_RELEASE_VERSION=${LATEST_VERSION}a
             fi
           fi
 
-          echo "NEW_RELEASE_VERSION=$NEW_RELEASE_VERSION" >> $GITHUB_ENV
+          echo "ENV_NEW_RELEASE_VERSION=$NEW_RELEASE_VERSION" >> $GITHUB_ENV
 
       - name: Make Draft release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${NEW_RELEASE_VERSION}
+          tag: ${ENV_NEW_RELEASE_VERSION}
           draft: true
           token: ${{ secrets.ACCESS_TOKEN }}
