@@ -2,7 +2,7 @@ name: "PR"
 
 on:
   pull_request:
-    types: [opened]
+    # types: [opened]
     branches:
       - master
 
@@ -16,7 +16,6 @@ jobs:
         with:
           submodules: true
           token: ${{ secrets.ACCESS_TOKEN }}
-          ref: ${{ github.base_ref }}
 
       - name: Check Diff and Verifying release
         shell: bash
@@ -37,7 +36,6 @@ jobs:
 
           echo $IS_REVIEW_RELEASE
           echo "ENV_IS_REVIEW_RELEASE=$IS_REVIEW_RELEASE" >> $GITHUB_ENV
-          ls -alh
 
       - name: Get Latest Release tag name
         shell: bash
