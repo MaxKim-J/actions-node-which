@@ -16,3 +16,9 @@ else
 fi
 
 echo $NEW_VERSION
+
+LATEST_RELEASE=$(curl --silent -i -u username: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 "https://api.github.com/repos/MaxKim-J/actions-node-which/releases/latest" | grep '"tag_name":' | sed -E 's/"tag_name": "(.+)"\,/\1/')
+
+
+
+echo ${LATEST_RELEASE}
