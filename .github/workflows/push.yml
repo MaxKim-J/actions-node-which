@@ -48,7 +48,7 @@ jobs:
       - name: Get current release version
         shell: bash
         run: |
-          if [${ENV_IS_REVIEW_RELEASE} = true ]; then
+          if [ ${ENV_IS_REVIEW_RELEASE} = true ]; then
             NEW_RELEASE_VERSION=v$(grep "versionName \"[1-9].[0-9].[0-9]\"" android/app/build.gradle | tr -d ' ' | cut -c 13-17 )
           else
             if [ ${ENV_LATEST_RELEASE:6}!= '' ]; then
@@ -59,11 +59,13 @@ jobs:
             fi
           fi
 
+          echo $NEW_RELEASE_VERSION
           echo "ENV_NEW_RELEASE_VERSION=$NEW_RELEASE_VERSION" >> $GITHUB_ENV
 
       - name: Make Draft release
-        uses: ncipollo/release-action@v1
-        with:
-          tag: ${ENV_NEW_RELEASE_VERSION}
-          draft: true
-          token: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          curl \ 
+          -X POST \ 
+          --silent -i -u username:${{ secrets.ACCESS_TOKEN }} \ 
+          "https://api.github.com/repos/MaxKim-J/actions-node-which/releases/latest" \
+          -d '{"tag_name":${ENV_NEW_RELEASE_VERSION}, "name":${ENV_NEW_RELEASE_VERSION}}'
